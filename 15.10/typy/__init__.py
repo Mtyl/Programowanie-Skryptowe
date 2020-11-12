@@ -1,0 +1,2 @@
+slownik = dict()
+lista = list()

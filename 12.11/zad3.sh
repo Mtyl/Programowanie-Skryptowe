@@ -1,0 +1,1 @@
+python3 -c "import itertools,functools,re,sys;print(functools.reduce(lambda a, x: a+((x-1) % 2), iter(map(int, re.findall(r'[0-9]+', functools.reduce(lambda a,e: a+e, itertools.chain(iter(open(sys.argv[1])), iter(open(sys.argv[2]))))))),0))", "plik1.txt" "plik2.txt"
