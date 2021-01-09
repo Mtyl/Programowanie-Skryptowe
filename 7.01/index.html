@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            span:after{
+              content: '\0009';
+              white-space: pre;
+            }
+            .twrap::after{
+              content: '\000A';
+              white-space: pre;
+            }
+          </style>
+        <script>
+            let inputs = [];
+            let sink;
+            function main(){
+                for(el of document.getElementById("source").children){
+                    if(el.tagName === "INPUT") inputs.push(el); 
+                }
+                sink = document.getElementById("sink");
+            }
+
+            function sendForm(){
+                let postBody = "";
+                for(input of inputs){
+                    postBody += `${input.id}=${input.value}&`
+                }
+                postBody = encodeURIComponent(postBody.substring(0,
+                            postBody.length-1));
+                fetch(`/time`, {
+                    method: "POST",
+                    body: postBody
+                    }).then((response) => { 
+                        if (!response.ok) {
+                            return;
+                        }
+                        response.text().then((text) => {
+                            let parser = new DOMParser();
+                            let xmlDoc = parser.parseFromString(text, 'text/xml');
+                            sink.appendChild(xmlDoc.documentElement);
+                            //console.log(xmlDoc);
+                        }); 
+                    })
+            }
+        </script>
+    </head>
+    <body onload="main()">
+        <form id="source">
+            <label for="region">Region:</label>
+            <input type="text" id="region" value="europe" >
+            <br>
+            <label for="city">City:</label>
+            <input type="text" id="city" value="warsaw">
+            <br>
+            <button type="button" onclick="sendForm()">Send!</button>
+        </form>
+        <div id="sink">
+
+        </div>
+    </body>
+</html>

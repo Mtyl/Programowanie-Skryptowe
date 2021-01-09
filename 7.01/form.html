@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>
+      Form
+    </title>
+    <script>
+    let name;
+    /****************************************************************************/
+    /* Function that performs (asynchronous) query to the web server using AJAX */
+    /****************************************************************************/
+    function requestAJAX() {
+      // Create an object representing the request to the web server - see https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+      var xhr = new XMLHttpRequest();
+
+      // Registration of a (user) function that will process the response received from the server
+      xhr.onreadystatechange = () => response(xhr);
+
+      // Execution of the (asynchronous) query to the web server
+      xhr.open('GET', '/submit', true);
+      xhr.send(null);
+      // Examples of the use of the above methods - see https://www.w3schools.com/xml/ajax_xmlhttprequest_send.asp
+    }
+
+    /*****************************************************************/
+    /* The function that processes the AJAX response from the server */
+    /*****************************************************************/
+    function response(xhr) {
+      try {
+        if (xhr.readyState == XMLHttpRequest.DONE) { // If the response is ready
+          if (xhr.status == 200) {                   // If the request was correct
+
+            // If the data you receive is a plain text or a JSON document, use the following code
+            var received_data = xhr.responseText; // Get a response in the form of a string
+            window.alert(received_data);          // and display it
+          }
+          else
+            window.alert('There was a problem with this request.');
+        }
+      }
+      catch (e) {
+        window.alert('Exception caught: ' + e.description);
+      }
+    }
+    /*********************************************************************************/
+    /* Function that performs (asynchronous) query to the web server using Fetch API */
+    /*********************************************************************************/
+    function requestFetchAPI() {
+      fetch('/submit') // Execution of the (asynchronous) query to the web server - a promise is created
+        .then(function (response) { // if the promise is fulfilled
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          response.text().then((text) => window.alert(text)); // show the Promise object
+        })
+        .catch(function (error) { // if the promise is rejected
+          window.alert('Looks like there was a problem: \n', error);
+        });
+    }
+
+    function xGet(){
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => response(xhr);
+        xhr.open('GET', `/submit?imie=${name.value}`, true);
+        xhr.send(null);
+    }
+
+    function xPost(){
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => response(xhr);
+        xhr.open('POST', '/post', true);
+        xhr.send(`imie=${name.value}`);
+    }
+
+    function fGet() {
+      fetch(`/submit?imie=${name.value}`) // Execution of the (asynchronous) query to the web server - a promise is created
+        .then(function (response) { // if the promise is fulfilled
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          response.text().then((text) => window.alert(text)); // show the Promise object
+        })
+        .catch(function (error) { // if the promise is rejected
+          window.alert('Looks like there was a problem: \n', error);
+        });
+    }
+
+    function fPost() {
+      fetch(`/post`, {
+          method: "POST",
+          body: `imie=${name.value}`
+      }).then(function (response) { // if the promise is fulfilled
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          response.text().then((text) => window.alert(text)); // show the Promise object
+        })
+        .catch(function (error) { // if the promise is rejected
+          window.alert('Looks like there was a problem: \n', error);
+        });
+    }
+
+    </script>
+  </head>
+  <body onload="name = document.getElementById('imie');">
+    <main>
+      <form method="get"
+            action="/submit">
+        <label>Perform a query to the web server with the <strong>GET</strong> method</label> 
+            <input type="submit"
+              value="Without using AJAX or Fetch API"> 
+              
+              <input type="button"
+              value="Using AJAX"
+              onclick="requestAJAX()"> 
+              
+              <input type="button"
+              value="Using Fetch API"
+              onclick="requestFetchAPI()">
+      </form>
+      <br>
+      <form>
+        <label for="imie">Give me your name:</label>
+          <input type="text" id="imie">
+          <button class="btn btn-primary" onclick="xGet()" type="button">AJAX (GET)</button>
+          <button class="btn btn-primary" onclick="xPost()" type="button">AJAX (POST)</button>
+          <button class="btn btn-primary" onclick="fGet()" type="button">Fetch (GET)</button>
+          <button class="btn btn-primary" onclick="fPost()" type="button">Fetch (POST)</button>
+      </form>
+    </main>
+  </body>
+</html>

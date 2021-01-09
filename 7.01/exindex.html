@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+        <style>
+            span:after{
+              content: '\0009';
+              white-space: pre;
+            }
+            .twrap::after{
+              content: '\000A';
+              white-space: pre;
+            }
+          </style>
+        <script>
+            let inputs = [];
+            let sink;
+            let mydata;
+            let myChart
+            function main(){
+                for(el of document.getElementById("source").children){
+                    if(el.tagName === "INPUT") inputs.push(el); 
+                }
+                sink = document.getElementById("sink");
+                var ctx = document.getElementById('myChart');
+    mydata = {
+        labels: ["Apple", "Pear", "Pineapple", "Blueberry", "Raspberry", "Peach"],
+        datasets: [{
+            label: 'price in $',
+            data: [0,0,0,0,0,0],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    }
+myChart = new Chart(ctx, {
+    type: 'bar',
+    data: mydata,
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+window.setInterval(sendForm, 500);
+            }
+
+            
+
+            function sendForm(){
+                let postBody = "";
+                for(input of inputs){
+                    postBody += `${input.id}=${input.value}&`
+                }
+                postBody = encodeURIComponent(postBody.substring(0,
+                            postBody.length-1));
+                fetch(`/price`, {
+                    method: "POST",
+                    body: postBody
+                    }).then((response) => { 
+                        if (!response.ok) {
+                            return;
+                        }
+                        response.text().then((text) => {
+                            //console.log(text);
+                            text = text.substring(6, text.length-7);
+                            //console.log(text);
+                            text = text.split('<br>');
+                            //console.log(text);
+                            text.pop();
+                            for(comp of text){
+                                data = comp.split(':');
+                                data[1] = Number(data[1]);
+                                let i = mydata.labels.indexOf(data[0]);
+                                //console.log(i);
+                                mydata.datasets[0].data[i] = data[1];
+                            }
+                            myChart.update();
+                            //console.log(xmlDoc);
+                        }); 
+                    })
+            }
+        </script>
+    </head>
+    <body onload="main()">
+        <form id="source">
+            <label for="count">Region:</label>
+            <input type="text" id="count" value="5" >
+            <br>
+        </form>
+        <canvas id="myChart"></canvas>
+    </body>
+</html>

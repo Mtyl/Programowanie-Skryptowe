@@ -1,0 +1,75 @@
+.azure {
+    background-color: rgb(223, 255, 244);
+    border: black solid 1px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 2px 2px grey;
+}
+
+aside {
+    position: absolute;
+    right: 10px;
+    top: 85px;
+    width: 500px;
+}
+
+footer {
+    /* Specyfikacja wyglądu */
+}
+
+header {
+    /* Specyfikacja wyglądu */
+}
+
+main {
+    max-width: 530px;
+    margin-top: 15px;
+}
+
+blockquote{
+    font-family: 'Courier New', Courier, monospace;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+h1, h2{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+nav {
+    margin-top: 15px;
+    width: 125px;
+}
+
+nav ul {
+    /* Specyfikacja wyglądu */
+}
+
+nav li {
+    /* Specyfikacja wyglądu */
+}
+
+@keyframes RedToBlue{
+    from{color: red;}
+    to{color: blue}
+}
+
+@keyframes BlueToRed{
+    from{color: blue;}
+    to{color: red}
+}
+
+@media screen and (min-width: 768px) and (max-width: 992px) {
+	header h1{
+        color: blue;
+        animation: RedToBlue 2s 1;
+    }
+}
+
+@media screen and (max-width: 768px) {
+	header h1{
+        color: red;
+        animation: BlueToRed 2s 1;
+    }
+}

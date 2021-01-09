@@ -1,0 +1,66 @@
+<html>
+    <head>
+        <style>
+            td{
+                border:1px solid black;
+                padding :5px;
+            }
+        </style>
+        <script>
+            var maxCol = 30;
+            var points = 0;
+            var table = document.createElement("table");
+            function mainf(){
+               //cell = document.createElement("td")
+                for(j=0; j<10; j++){
+                    row = document.createElement("tr");
+                    for(i=0; i<maxCol;i++){
+                        cell = document.createElement("td");
+                        cell.className = "col" + i;
+                        cell.addEventListener("click", reactor);
+                        row.appendChild(cell);
+                    }
+                    table.appendChild(row);
+                }
+                document.getElementsByTagName("body")[0].appendChild(table);
+                refresh()
+                window.setInterval(refresh, 1000);
+                //window.setTimeout(function(){delColumn("col3")}, 5000);
+            }
+
+            function refresh(){
+                counter = 0
+                for(row of table.childNodes){
+                    for(cell of row.childNodes){
+                        cell.textContent = Math.floor(Math.random() * 3) - 1;
+                        //cell.appendChild(document.createTextNode(Math.floor(Math.random() * 3) - 1));
+                        counter++
+                    }
+                }
+                if(counter <= 100){
+                    document.getElementsByTagName("body")[0].removeChild(table);
+                }
+            }
+
+            function delColumn(className){
+                for(row of table.childNodes){
+                    for(cell of row.childNodes){
+                        if(className == cell.className){
+                            row.removeChild(cell);
+                        }
+                    }
+                }
+            }
+
+            function reactor(event){
+                cell = event.target;
+                points += Number(cell.innerHTML);
+                delColumn(cell.className);
+                document.getElementsByTagName("span")[0].innerHTML = points;
+            }
+        </script>
+    </head>
+    <body onload="mainf()">
+        <p>Points: <span></span></p>
+    </body>
+</html>

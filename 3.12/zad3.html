@@ -1,0 +1,70 @@
+<html>
+    <head>
+        <script>
+            var left = 0; 
+            var intID;
+            var observerList = [];
+            function updateSpan(){
+                if(left >= 0){
+                    spans = document.getElementsByTagName("span");
+                for(el of spans){
+                    el.firstChild.data = left;
+                }
+                left = left > 0 ? left-1 : left;
+                }    
+            }
+            function counter(){
+                left = document.getElementById("counter").valueAsNumber;
+                intID = setInterval(updateSpan, 300);
+            }
+
+            class webParent extends HTMLElement{
+                constructor(){
+                    super();
+                    this.shadowAccess = this.attachShadow({mode:'open'});
+                    //console.log(this.shadowAccess);
+                    //setInterval(listener(this), 10);
+                    setInterval(this.updateObject.bind(this), 10);
+                }
+
+                updateObject() {
+                    this.shadowAccess.innerHTML = left;
+                }
+            }
+
+            customElements.define('moby-dick', webParent);
+        </script>
+    </head>
+    <input id="counter" type="number" value="10"  onchange="counter();">
+    <body>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <span>0</span>
+        <moby-dick></moby-dick>
+        <moby-dick></moby-dick>
+        <moby-dick></moby-dick>
+
+    </body>
+</html>
