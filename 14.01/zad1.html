@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8">
+    <title>
+      Demo
+    </title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  </head>
+  <body>
+    <script>
+    let col, val, h, w;
+    $(document).ready(function () {
+      //alert("The current document is ready for processing");
+      $("span").hover(function() {
+          col = $( this ).css( "background-color" );
+          val = $(this).text();
+          $( this ).css( "background-color", "red" );
+          let num = Number(val);
+          if(num == NaN){
+              $(this).text("Nie-liczba");
+          }else{
+              $(this).text(num+10);
+          }
+      }, function() {
+          $(this).text(val);
+          $(this).css("background-color", col);
+      }).click(function(){
+          console.log(hi);
+          if($(this).height() != 250){
+          h = $(this).height();
+          w = $(this).width();
+          $(this).animate({
+              height: 250,
+              width: 250
+          }, 1000);
+          }
+      })
+    });
+    </script>
+    <main>
+      Text <span id='elementSPAN'>123</span>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+          crossorigin="anonymous"></script>
+  </body>
+</html>
