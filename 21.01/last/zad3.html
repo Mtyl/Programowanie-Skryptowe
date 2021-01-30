@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8">
+    <title>
+      Demo
+    </title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  </head>
+  <body>
+    <script>
+
+    $(document).ready(function () {
+      $("input").keyup(function(evt){
+        var request = $.ajax({
+            url: "req",
+            method: "POST",
+            data: { filename: $("#filename").val(), 
+                    data: $("#data").val() },
+            dataType: "json"
+        });
+
+        request.done(function(msg){
+            $("container").remove();
+            $("main").append($("<container>"));
+            console.log(msg);
+            jQuery.each(msg, function(i, val){
+                let ul = $(`<ul id=${i}>`).text(i);
+                for(l of val){
+                    $(ul).append($("<li>").text(l));
+                }
+                $("container").append($(ul));
+            })
+        })
+      })
+    });
+    </script>
+    <main>
+      <form>
+        <label for="filename">Filename:</label>
+        <input type="text" id="filename" size="50">
+        <br>
+        <label for="data">Data:</label>
+        <input type="text" id="data" size="50">
+       
+      </form>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+          crossorigin="anonymous"></script>
+  </body>
+</html>

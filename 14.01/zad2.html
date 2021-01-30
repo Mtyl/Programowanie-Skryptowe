@@ -10,27 +10,35 @@
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
           crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <style>
+        main > .progress{
+            height: 30px;
+        }
+        td{
+            padding: 5px;
+        }
+    </style>
     <script>
     
     let counter = 0;
     let max;
     $( document ).ready(function() {
-        max = Math.floor(Math.random() * (6 - 4)) + 4;
+        max = Math.floor(Math.random() * (8 - 3)) + 3;
         $(".progress").append($(`<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">`))
         $(".progress-bar").text("0/"+max);
     });
 
-    function post(){
+    function xPost(){
         counter++;
         var request = $.ajax({
-            url: "j",
+            url: "journal",
             method: "POST",
             data: { iden : $("#iden").val() },
             dataType: "xml"
         });
         
         if(counter >= max){
-            $("form").remove();
+            $("form").slideUp(500);
         }
         {
             let percent = Math.floor(counter/max*100);
@@ -39,21 +47,29 @@
         }
 
         request.done(function( msg ) {
+            $("output > table").remove();
             let header = $(msg).find("record > header");
+            let meta = $(msg).find("record > metadata").children().first();
             let table = $("<table>");
             let status = $(header).attr("status");
-            $(header).children().each(function(){
+            let appendTable = (name, value) => {
                 let row = $("<tr>");
-                let nameCell = $("<td>").append($(this).prop("tagName"));
-                let valueCell = $("<td>").append($(this).text());
+                let nameCell = $("<td>").append(name);
+                let valueCell = $("<td>").append(value);
                 $(row).append(nameCell);
                 $(row).append(valueCell);
                 $(table).append(row);
+            };
+            $(header).children().each(function(){
+                appendTable($(this).prop("tagName"), $(this).text());
             });
-            
+            $(meta).children().each(function(){
+                appendTable($(this).prop("tagName"), $(this).text());
+            });
             if(status != undefined){
                 appendTable("status", status);
             }
+            
             $("output").append(table);
         });
     }
@@ -65,7 +81,7 @@
       <form>
         <label for="imie">Identifier:</label>
           <input type="text" id="iden" size="50" value="oai:ojs.journals.agh.edu.pl:article/1100">
-          <button class="btn btn-primary" onclick="post()" type="button">AJAX (POST)</button>
+          <button class="btn btn-primary" onclick="xPost()" type="button">AJAX (POST)</button>
       </form>
       <output>
 

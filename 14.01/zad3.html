@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>
+      Journal
+    </title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+    
+    let counter = 0;
+    let max;
+$( document ).ready(function() {
+    $("input").keyup(()=>{
+        var request = $.ajax({
+            url: "files",
+            method: "POST",
+            data: { name : $("#name").val(),
+            data: $("#data").val() },
+            dataType: "html"
+        });
+        
+        request.done(function( msg ) {
+            msg = $.parseHTML(msg);
+            console.log(msg);
+            $("#found").remove();
+            $("output").append($(msg));
+        });
+    });
+});
+    </script>
+  </head>
+  <body>
+    <main>
+      <form>
+        <label for="imie">Name:</label>
+          <input type="text" id="name" size="50"><br>
+          <label for="imie">Data:</label>
+          <input type="text" id="data" size="50">
+          
+      </form>
+      <output>
+
+      </output>
+    </main>
+  </body>
+</html>
